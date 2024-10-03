@@ -39,10 +39,10 @@ jobs:
       - name: Install Buildozer
         run: pip install --upgrade buildozer
 
-      # Install required dependencies (including appdirs)
+      # Install required dependencies (including toml and appdirs)
       - name: Install Python dependencies
         run: |
-          pip install appdirs
+          pip install appdirs toml
           pip install Cython
 
       # Download python-for-android if not exists
