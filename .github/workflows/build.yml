@@ -19,4 +19,68 @@ jobs:
 
       # 3. Buildozer 글로벌 디렉토리 캐시
       - name: Cache Buildozer global directory
-        uses: actions/cache
+        uses: actions/cache@v3
+        with:
+          path: .buildozer_global
+          key: buildozer-global-${{ hashFiles('buildozer.spec') }} 
+          restore-keys: |
+            buildozer-global-
+
+      # 4. Buildozer 디렉토리 캐시
+      - name: Cache Buildozer directory
+        uses: actions/cache@v3
+        with:
+          path: .buildozer
+          key: ${{ runner.os }}-${{ env.date }}-${{ hashFiles('buildozer.spec') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ env.date }}-
+            ${{ runner.os }}-
+
+      # 5. Buildozer 및 필수 파이썬 모듈 설치
+      - name: Install Buildozer and dependencies
+        run: |
+          pip install buildozer
+          pip install build toml appdirs
+          pip install Cython
+
+      # 6. Android SDK 설치 및 경로 설정
+      - name: Install Android SDK
+        run: |
+          sudo apt-get install -y android-sdk
+          export ANDROID_SDK_ROOT=/usr/lib/android-sdk
+          export PATH=$PATH:$ANDROID_SDK_ROOT/tools/bin:$ANDROID_SDK_ROOT/platform-tools
+          yes | sdkmanager --licenses
+
+      # 7. Android SDK Build-Tools 설치
+      - name: Install Build Tools
+        run: sdkmanager "build-tools;35.0.0"
+
+      # 8. python-for-android 다운로드 (필수)
+      - name: Download python-for-android
+        run: |
+          git clone https://github.com/kivy/python-for-android.git /home/runner/work/project1/project1/.buildozer/android/platform/python-for-android
+
+      # 9. Android NDK 설치
+      - name: Install Android NDK
+        run: |
+          wget https://dl.google.com/android/repository/android-ndk-r25b-linux.zip
+          unzip android-ndk-r25b-linux.zip
+          export ANDROID_NDK_HOME=$PWD/android-ndk-r25b
+          export PATH=$PATH:$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin
+
+      # 10. pip 최신 버전으로 업그레이드
+      - name: Upgrade pip
+        run: pip install --upgrade pip
+
+      # 11. Buildozer를 사용해 클린 빌드 및 APK 빌드
+      - name: Clean and Build with Buildozer
+        run: |
+          buildozer android clean
+          buildozer android debug
+
+      # 12. 빌드된 APK 업로드
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: apk
+          path: ./bin/*.apk
