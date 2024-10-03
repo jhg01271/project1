@@ -39,6 +39,12 @@ jobs:
       - name: Install Buildozer
         run: pip install --upgrade buildozer
 
+      # Install required dependencies (including appdirs)
+      - name: Install Python dependencies
+        run: |
+          pip install appdirs
+          pip install Cython
+
       # Download python-for-android if not exists
       - name: Check and Download python-for-android
         run: |
@@ -60,10 +66,6 @@ jobs:
           sudo apt-get install -y android-sdk
           export ANDROID_SDK_ROOT=/usr/lib/android-sdk
           export PATH=$PATH:$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT/platform-tools
-
-      # Install Cython (required for build)
-      - name: Install Cython
-        run: pip install Cython
 
       # Upgrade pip to the latest version
       - name: Upgrade pip
