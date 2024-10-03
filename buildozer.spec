@@ -40,8 +40,8 @@ android.minapi = 21
 # (int) Android SDK version to use
 android.sdk = 35
 
-# (str) Android NDK version to use
-android.ndk = 25b  # 명시적으로 NDK 버전 설정
+# (str) Android NDK version to use (정확한 값만 기재)
+android.ndk = 25b
 
 # (int) Android NDK API to use. This is the minimum API your app will support, it should usually match android.minapi.
 android.ndk_api = 21
