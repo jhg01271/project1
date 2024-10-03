@@ -35,22 +35,15 @@ jobs:
             ${{ runner.os }}-${{ env.date }}-
             ${{ runner.os }}-
 
-      # Install latest Buildozer version
+      # Install Buildozer
       - name: Install Buildozer
-        run: pip install --upgrade buildozer
+        run: pip install buildozer
 
-      # Install required dependencies (including build, toml, and appdirs)
+      # Install Python dependencies (including 'build', 'toml', and 'appdirs')
       - name: Install Python dependencies
         run: |
           pip install build toml appdirs
           pip install Cython
-
-      # Download python-for-android if not exists
-      - name: Check and Download python-for-android
-        run: |
-          if [ ! -d "/home/runner/work/project1/project1/.buildozer/android/platform/python-for-android" ]; then
-            git clone https://github.com/kivy/python-for-android.git /home/runner/work/project1/project1/.buildozer/android/platform/python-for-android
-          fi
 
       # Install Android NDK
       - name: Install Android NDK
@@ -82,4 +75,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: apk
-          path: ./bin/*.apk # Adjust according to actual build path
+          path: ./bin/*.apk
