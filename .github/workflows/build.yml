@@ -8,38 +8,26 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v2
 
-      # Remove any existing GitHub extraheader to avoid conflicts
-      - name: Remove GitHub extraheader
-        run: |
-          git config --unset-all http.https://github.com/.extraheader || true
-
-      # Get current UTC date for cache key
+      # used to cache dependencies with a timeout
       - name: Get Date
         id: get-date
-        run: echo "date=$(date -u +'%Y%m%d')" >> $GITHUB_ENV
+        run: |
+          echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
+        shell: bash
 
-      # Cache Buildozer global directory
       - name: Cache Buildozer global directory
-        uses: actions/cache@v3
+        uses: actions/cache@v2
         with:
           path: .buildozer_global
-          key: buildozer-global-${{ hashFiles('buildozer.spec') }} 
-          restore-keys: |
-            buildozer-global-
+          key: buildozer-global-${{ hashFiles('buildozer.spec') }} # Replace with your path
 
-      # Cache Buildozer build directory
-      - name: Cache Buildozer directory
-        uses: actions/cache@v3
+      - uses: actions/cache@v2
         with:
           path: .buildozer
-          key: ${{ runner.os }}-${{ env.date }}-${{ hashFiles('buildozer.spec') }}
-          restore-keys: |
-            ${{ runner.os }}-${{ env.date }}-
-            ${{ runner.os }}-
+          key: ${{ runner.os }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('buildozer.spec') }}
 
-      # Build with Buildozer
       - name: Build with Buildozer
         uses: ArtemSBulgakov/buildozer-action@v1
         id: buildozer
@@ -47,9 +35,8 @@ jobs:
           command: buildozer android debug
           buildozer_version: stable
 
-      # Upload build artifacts
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           name: package
-          path: ./bin/*.apk # Adjust according to actual build path
+          path: ${{ steps.buildozer.outputs.filename }}
