@@ -10,6 +10,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      # Remove any existing GitHub extraheader to avoid conflicts
+      - name: Remove GitHub extraheader
+        run: |
+          git config --unset-all http.https://github.com/.extraheader || true
+
       # Get current UTC date for cache key
       - name: Get Date
         id: get-date
@@ -47,4 +52,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: package
-          path: ./bin/*.apk # Buildozer가 생성하는 APK 파일 경로 지정
+          path: ./bin/*.apk # Adjust according to actual build path
