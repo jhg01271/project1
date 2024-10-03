@@ -24,7 +24,7 @@ jobs:
           restore-keys: |
             buildozer-global-
 
-      # Cache Buildozer build directory
+      # Cache Buildozer directory
       - name: Cache Buildozer directory
         uses: actions/cache@v3
         with:
@@ -38,6 +38,21 @@ jobs:
       - name: Install specific Buildozer version
         run: pip install buildozer==1.4.0
 
+      # Install Android NDK
+      - name: Install Android NDK
+        run: |
+          wget https://dl.google.com/android/repository/android-ndk-r25b-linux.zip
+          unzip android-ndk-r25b-linux.zip
+          export ANDROID_NDK_HOME=$PWD/android-ndk-r25b
+          export PATH=$PATH:$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin
+
+      # Install Android SDK
+      - name: Install Android SDK
+        run: |
+          sudo apt-get install -y android-sdk
+          export ANDROID_SDK_ROOT=/usr/lib/android-sdk
+          export PATH=$PATH:$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT/platform-tools
+
       # Install Cython (required for build)
       - name: Install Cython
         run: pip install Cython
@@ -46,9 +61,11 @@ jobs:
       - name: Upgrade pip
         run: pip install --upgrade pip
 
-      # Build with Buildozer
-      - name: Build with Buildozer
-        run: buildozer android debug
+      # Clean and Build with Buildozer
+      - name: Clean and Build with Buildozer
+        run: |
+          buildozer android clean
+          buildozer android debug
 
       # Upload build artifacts with latest upload-artifact version
       - name: Upload artifacts
