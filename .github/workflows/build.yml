@@ -20,7 +20,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: .buildozer_global
-          key: buildozer-global-${{ hashFiles('buildozer.spec') }} # Adjust path if needed
+          key: buildozer-global-${{ hashFiles('buildozer.spec') }} 
           restore-keys: |
             buildozer-global-
 
@@ -47,4 +47,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: package
-          path: ${{ steps.buildozer.outputs.filename }}
+          path: ./bin/*.apk # Buildozer가 생성하는 APK 파일 경로 지정
