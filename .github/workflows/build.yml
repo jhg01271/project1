@@ -34,17 +34,21 @@ jobs:
             ${{ runner.os }}-${{ env.date }}-
             ${{ runner.os }}-
 
+      # Install specific Buildozer version (1.4.0)
+      - name: Install specific Buildozer version
+        run: pip install buildozer==1.4.0
+
+      # Upgrade pip to the latest version
+      - name: Upgrade pip
+        run: pip install --upgrade pip
+
       # Build with Buildozer
       - name: Build with Buildozer
-        uses: ArtemSBulgakov/buildozer-action@v1
-        id: buildozer
-        with:
-          command: buildozer android debug
-          buildozer_version: stable
+        run: buildozer android debug
 
       # Upload build artifacts with latest upload-artifact version
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3  # v2 -> v3로 변경
+        uses: actions/upload-artifact@v3
         with:
           name: package
           path: ./bin/*.apk # Adjust according to actual build path
