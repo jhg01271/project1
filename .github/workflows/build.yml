@@ -56,24 +56,29 @@ jobs:
           export ANDROID_NDK_HOME=$PWD/android-ndk-r25b
           export PATH=$PATH:$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin
 
-      # 8. Android SDK 설치
-      - name: Install Android SDK
+      # 8. Android SDK 설치 및 라이선스 자동 수락
+      - name: Install Android SDK and accept licenses
         run: |
           sudo apt-get install -y android-sdk
           export ANDROID_SDK_ROOT=/usr/lib/android-sdk
           export PATH=$PATH:$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT/platform-tools
+          yes | sdkmanager --licenses
 
-      # 9. pip 최신 버전으로 업그레이드
+      # 9. Android SDK Build-Tools 설치
+      - name: Install Build Tools
+        run: sdkmanager "build-tools;35.0.0"
+
+      # 10. pip 최신 버전으로 업그레이드
       - name: Upgrade pip
         run: pip install --upgrade pip
 
-      # 10. Buildozer를 사용해 클린 빌드 및 APK 빌드
+      # 11. Buildozer를 사용해 클린 빌드 및 APK 빌드
       - name: Clean and Build with Buildozer
         run: |
           buildozer android clean
           buildozer android debug
 
-      # 11. 빌드된 APK 업로드
+      # 12. 빌드된 APK 업로드
       - name: Upload APK
         uses: actions/upload-artifact@v3
         with:
