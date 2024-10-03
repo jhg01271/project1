@@ -19,7 +19,7 @@ source.include_exts = py,png,jpg,kv,atlas,ttf
 version = 0.1
 
 # (list) Application requirements
-requirements = python3,kivy,android,pillow,kivymd,plyer
+requirements = python3,kivy,android,pillow,kivymd,plyer,sdl2,sdl2_ttf,sdl2_image,sdl2_mixer
 
 # (list) Supported orientations
 orientation = portrait
@@ -96,11 +96,13 @@ ios.ios_deploy_branch = 1.10.0
 
 # (bool) Whether or not to sign the code
 ios.codesign.allowed = false
+
 #
 # buildozer specific
 #
 
 # (int) Log level (0 = error only, 1 = info, 2 = debug (with command output))
 log_level = 2
+
 # (int) Display warning if buildozer is run as root (0 = False, 1 = True)
 warn_on_root = 1
