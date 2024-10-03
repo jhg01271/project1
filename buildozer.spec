@@ -19,7 +19,7 @@ source.include_exts = py,png,jpg,kv,atlas,ttf
 version = 0.1
 
 # (list) Application requirements
-requirements = python==3.11,hostpython3==3.11,kivy,android,pillow,kivymd,plyer
+requirements = python3,kivy,android,pillow,kivymd,plyer
 
 # (list) Supported orientations
 orientation = portrait
@@ -40,20 +40,14 @@ android.minapi = 21
 # (int) Android SDK version to use
 android.sdk = 35
 
-# (str) Android NDK version to use
-android.ndk = 25b
+# (str) Android NDK version to use (leave empty to auto-download latest)
+android.ndk = 
 
 # (int) Android NDK API to use. This is the minimum API your app will support, it should usually match android.minapi.
 android.ndk_api = 21
 
 # (bool) Use --private data storage (True) or --dir public storage (False)
 android.private_storage = True
-
-# (str) Android NDK directory (if empty, it will be automatically downloaded.)
-android.ndk_path = 
-
-# (str) Android SDK directory (if empty, it will be automatically downloaded.)
-android.sdk_path = 
 
 # (bool) If True, then automatically accept SDK license agreements.
 android.accept_sdk_license = True
