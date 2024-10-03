@@ -38,6 +38,10 @@ jobs:
       - name: Install specific Buildozer version
         run: pip install buildozer==1.4.0
 
+      # Install Cython (required for build)
+      - name: Install Cython
+        run: pip install Cython
+
       # Upgrade pip to the latest version
       - name: Upgrade pip
         run: pip install --upgrade pip
